@@ -15,6 +15,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
     <title>Hello, world!</title>
 </head>
 
@@ -51,10 +53,21 @@
                     <textarea class="form-control" name="address"></textarea>
                 </div>
             </div>
+            {{-- <div class="form-group row">
+                <label for="city" class="col-sm-2 col-form-label">City</label>
+                <div class="col-sm-10">
+                    <select value="" class="form-control" name="city" id="city" >
+                        <option value="">Select City..</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div> --}}
             <div class="form-group row">
                 <label for="state" class="col-sm-2 col-form-label">State</label>
                 <div class="col-sm-10">
-                    <select value="" class="form-control" name="state" id="state">
+                    <select value="" class="form-control" name="state" id="state" >
                         <option value="">Select State..</option>
                         @foreach ($states as $state)
                             <option value="{{ $state->state_id }}">{{ $state->state_name }}</option>
@@ -67,9 +80,9 @@
                 <div class="col-sm-10">
                     <select value="" class="form-control" name="city" id="city">
                         <option value="">Select City..</option>
-                        @foreach ($cities as $city)
+                        {{-- @foreach ($cities as $city)
                             <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>
-                        @endforeach
+                        @endforeach --}}
                     </select>
                 </div>
             </div>
@@ -102,6 +115,20 @@
     <script>
         $(document).ready(function() {
             $('.skills').select2();
+        });
+
+        jQuery(document).ready(function() {
+            jQuery('#state').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '/city',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#city').html(result)
+                    }
+                });
+            });
         });
     </script>
 </body>

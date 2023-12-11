@@ -23,7 +23,8 @@
         <center>
             <h4>Edit Employee!</h4>
         </center><br>
-        <form action="" method="post" enctype="multipart/form-data">
+        {{-- {{dd($employees)}} --}}
+        <form action="{{route('employee.update',$employees->id)}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group row">
                 <label for="name" class="col-sm-2 col-form-label">Name</label>
@@ -61,11 +62,13 @@
                         {{-- <option value="">Select State..</option> --}}
                         @foreach ($states as $state)
                             @if ($employees->state == $state->state_id)
-                                <option value="{{ $state->state_id }}">{{ $employees->state ? $state->state_name : '' }}
+                                <option value="{{ $state->state_id }}" selected>{{ $state->state_name }}
                                 </option>
+                            @else
+                                <option value="{{ $state->state_id }}">{{ $state->state_name }}</option>
                             @endif
                         @endforeach
-                        <option value="{{ $state->state_id }}">{{ $state->state_name }}</option>
+
                     </select>
                 </div>
             </div>
@@ -73,22 +76,20 @@
                 <label for="city" class="col-sm-2 col-form-label">City</label>
                 <div class="col-sm-10">
                     <select value="" class="form-control" name="city" id="city">
-                        {{-- <option value="">Select City..</option> --}}
+                        <option value="">Select City..</option>
                         @foreach ($cities as $city)
                             @if ($employees->city == $city->city_id)
-                                <option value="{{ $city->city_id }}">{{ $employees->city ? $city->city_name : '' }}
+                                <option value="{{ $city->city_id }}" selected>{{ $city->city_name }}
                                 </option>
                             @endif
                         @endforeach
-                        <option value="{{ $city->city_id }}">{{ $city->city_name }}</option>
-
                     </select>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="image" class="col-sm-2 col-form-label">Profile Photo</label>
                 <div class="col-sm-10">
-                    <input type="file" name="image" class="form-control" value="{{ $employees->image }}">
+                    <input type="file" name="image" class="form-control">
                 </div>
             </div>
             <div class="form-group row">
@@ -96,18 +97,16 @@
                 <div class="col-sm-10">
                     <select value="" name="skills[]" id="skills" class="skills" multiple="multiple"
                         style="width: 100%">
+
                         @php
-                            $skill_show = explode(',', $employee->skills);
+                            $selected = explode(',', $employees->skills);
                         @endphp
-                        @foreach ($skill_show as $skill_s)
-                            @foreach ($skills as $skill)
-                                @if ($employees->city == $city->city_id)
-                                    <option value="{{ $skill->skill_id }}">
-                                        {{ $employees->skills ? $skill_id->skill_name : '' }}</option>
-                                @endif
-                            @endforeach
+                        @foreach ($skills as $skill)
+                            <option value="{{ $skill->skill_id }}"
+                                {{ in_array($skill->skill_id, $selected) ? 'selected' : '' }}>{{ $skill->skill_name }}
+                            </option>
                         @endforeach
-                    </select>
+                    </select>  
                 </div>
             </div>
             <div class="form-group row">
@@ -123,6 +122,20 @@
     <script>
         $(document).ready(function() {
             $('.skills').select2();
+        });
+
+        jQuery(document).ready(function() {
+            jQuery('#state').change(function() {
+                let sid = jQuery(this).val();
+                jQuery.ajax({
+                    url: '/city',
+                    type: 'post',
+                    data: 'sid=' + sid + '&_token={{ csrf_token() }}',
+                    success: function(result) {
+                        jQuery('#city').html(result)
+                    }
+                });
+            });
         });
     </script>
 </body>

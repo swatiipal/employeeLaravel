@@ -81,8 +81,9 @@
                                 @endforeach
                             @endforeach
                         </td>
-                        <td><a type="button" class="btn btn-warning" href="{{route('employee.edit', $employee->id)}}">Edit</a>
-                            <a type="button" class="btn btn-danger" href="{{route('employee.delete', $employee->id)}}">Soft Delete</a>
+                        <td><a type="button" class="btn btn-warning" href="{{route('employee.edit', $employee->id)}}">Restore</a>
+                            <a type="button" class="btn btn-danger" href="{{route('employee.delete', $employee->id)}}"
+                                onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
                         </td>
                     </tr>
                 @endforeach
