@@ -30,11 +30,9 @@
             </center>
         </h4>
 
-        <a style="margin: 6px;" type="button" class="btn btn-primary p-1" href="{{ route('employee.create') }}"
-            style="">Add
-            Employee</a><br><br>
+        <a style="margin: 6px;" type="button" class="btn btn-primary p-1" href="{{ route('employee.view') }}"
+            style="">Console</a><br><br>
         <table id="myTable" class="display">
-
             <thead>
                 <tr>
                     <th>Sr No</th>
@@ -81,8 +79,8 @@
                                 @endforeach
                             @endforeach
                         </td>
-                        <td><a type="button" class="btn btn-warning" href="{{route('employee.edit', $employee->id)}}">Restore</a>
-                            <a type="button" class="btn btn-danger" href="{{route('employee.delete', $employee->id)}}"
+                        <td><a type="button" class="btn btn-warning" href="{{route('employee.restore', $employee->id)}}">Restore</a>
+                            <a type="button" class="btn btn-danger" href="{{route('employee.force-delete', $employee->id)}}"
                                 onclick="return confirm('Are you sure you want to delete this item?')">Delete</a>
                         </td>
                     </tr>

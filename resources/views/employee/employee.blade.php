@@ -41,6 +41,12 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" name="email">
+                </div>
+            </div>
+            <div class="form-group row">
                 <label for="gender" class="col-sm-2 col-form-label">Gender</label>
                 <div class="col-sm-10">
                     <input type="radio" name="gender" value="M"> Male
@@ -110,6 +116,8 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{{route('employee.view')}}" class="btn btn-primary p-1" type="button">View Employees</a>
+            <br><br>
         </form>
     </div>
     <script>

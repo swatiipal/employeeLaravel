@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('image',40);
             $table->string('skills',40);
             $table->string('certificate',40);
+            $table->rememberToken();
             $table->timestamps();
         });
     }

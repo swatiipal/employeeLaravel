@@ -32,9 +32,11 @@
 
         <a style="margin: 6px;" type="button" class="btn btn-primary p-1" href="{{ route('employee.create') }}"
             style="">Add
-            Employee</a><br><br>
+            Employee</a>
+        <a href="{{ route('import.employee') }}" class="btn btn-primary p-1" type="button">Excel Import</a>
+        <a href="{{ route('export.employee') }}" class="btn btn-primary p-1" type="button">Excel Export</a>
+        <a href="{{ route('employee.trash') }}" class="btn btn-primary p-1" type="button">Trash Data</a><br><br>
         <table id="myTable" class="display">
-
             <thead>
                 <tr>
                     <th>Sr No</th>
@@ -48,7 +50,6 @@
                 </tr>
             </thead>
             <tbody>
-
                 @foreach ($employees as $employee)
                     <tr>
                         <td>{{ $employee->id }}</td>
@@ -81,8 +82,10 @@
                                 @endforeach
                             @endforeach
                         </td>
-                        <td><a type="button" class="btn btn-warning" href="{{route('employee.edit', $employee->id)}}">Edit</a>
-                            <a type="button" class="btn btn-danger" href="{{route('employee.delete', $employee->id)}}">Soft Delete</a>
+                        <td><a type="button" class="btn btn-warning"
+                                href="{{ route('employee.edit', $employee->id) }}">Edit</a>
+                            <a type="button" class="btn btn-danger"
+                                href="{{ route('employee.delete', $employee->id) }}">Soft Delete</a>
                         </td>
                     </tr>
                 @endforeach

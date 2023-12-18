@@ -8,9 +8,18 @@ use App\Models\SkillModel;
 use App\Models\StateModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\EmployeesExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\YourImportClass;
 
 class EmployeeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guard')->except([
+            'logout', '/'
+        ]);
+    }
     public function create()
     {
         $skills = SkillModel::all();
@@ -24,6 +33,7 @@ class EmployeeController extends Controller
         $employee = new EmployeeModel;
         $employee->name = $request['name'];
         $employee->dob = $request['dob'];
+        $employee->email = $request['email'];
         $employee->gender = $request['gender'];
         $employee->address = $request['address'];
         $employee->state = $request['state'];
@@ -80,6 +90,7 @@ class EmployeeController extends Controller
         $employee = EmployeeModel::find($id);
         $employee->name = $request['name'];
         $employee->dob = $request['dob'];
+        $employee->email = $request['email'];
         $employee->gender = $request['gender'];
         $employee->address = $request['address'];
         $employee->state = $request['state'];
@@ -107,12 +118,6 @@ class EmployeeController extends Controller
         }
     }
 
-    public function trash(){
-        $employee = EmployeeModel::onlyTrashed()->get();
-        $data = compact('employee');
-        return view('utility')->with($data);
-    }
-    
     public function destroy(string $id)
     {
         $employee = EmployeeModel::find($id);
@@ -122,6 +127,28 @@ class EmployeeController extends Controller
         return redirect()->back();
     }
     
+    public function forceDelete(string $id){
+        $employee = EmployeeModel::withTrashed()->find($id);
+        if (!is_null($employee)) {
+            $employee->forceDelete();
+        }
+        return redirect()->back();
+    }
+    public function trash(){
+        $employees = EmployeeModel::onlyTrashed()->get();
+        $skills = SkillModel::all();
+        $states = StateModel::all();
+        $cities = CityModel::all();
+        $data = compact('employees','skills','states','cities');
+        return view('employee.utility')->with($data);
+    }
+    public function restore(string $id){
+        $employee = EmployeeModel::withTrashed()->find($id);
+        if (!is_null($employee)) {
+            $employee->restore();
+        }
+        return redirect()->back();
+    }
 
     public function city(Request $request)
     {
@@ -141,5 +168,28 @@ class EmployeeController extends Controller
             $html .= "<option value='" . $id . "'>" . $list->city_name . "</option>";
         }
         echo $html;
+    }
+
+    public function export() 
+    {
+        return Excel::download(new EmployeesExport, 'employees.xlsx');
+    }
+
+    public function index(){
+        return view('excel-import');
+    }
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+        
+        // Get the uploaded file
+        $file = $request->file('file');
+
+        // Process the Excel file
+        Excel::import(new YourImportClass, $file);
+        
+        return redirect()->back()->with('success', 'Excel file imported successfully!');
     }
 }
