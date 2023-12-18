@@ -14,12 +14,7 @@ use App\Imports\YourImportClass;
 
 class EmployeeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('guard')->except([
-            'logout', '/'
-        ]);
-    }
+    
     public function create()
     {
         $skills = SkillModel::all();
