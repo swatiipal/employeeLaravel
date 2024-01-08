@@ -26,8 +26,7 @@
     <div class="container"><br>
 
         <h4>
-            <center> Hello
-            </center>
+            <center> All Users! </center>
         </h4>
 
         <a style="margin: 6px;" type="button" class="btn btn-primary p-1" href="{{ route('employee.create') }}"

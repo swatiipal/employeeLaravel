@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\DB;
 use App\Exports\EmployeesExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\YourImportClass;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
-    
+
     public function create()
     {
         $skills = SkillModel::all();
@@ -29,6 +30,7 @@ class EmployeeController extends Controller
         $employee->name = $request['name'];
         $employee->dob = $request['dob'];
         $employee->email = $request['email'];
+        $employee->password = md5($request['password']);
         $employee->gender = $request['gender'];
         $employee->address = $request['address'];
         $employee->state = $request['state'];
@@ -86,6 +88,7 @@ class EmployeeController extends Controller
         $employee->name = $request['name'];
         $employee->dob = $request['dob'];
         $employee->email = $request['email'];
+        $employee->password = md5($request['password']);
         $employee->gender = $request['gender'];
         $employee->address = $request['address'];
         $employee->state = $request['state'];
@@ -187,4 +190,24 @@ class EmployeeController extends Controller
         
         return redirect()->back()->with('success', 'Excel file imported successfully!');
     }
+
+    public function login(){
+        
+        return view('login.login');
+    }
+    public function storedata(Request $request)
+    {
+        $users = EmployeeModel::where('email',$request->email)->first();
+        if ($users) {
+            if(Hash::check($request->password, $users->password)){
+                session()->put('login',$request->email);
+            }else {
+                return "Login Failed";
+            }
+        }else {
+            return "Invalid Login!";
+        }
+        
+    }
+    
 }

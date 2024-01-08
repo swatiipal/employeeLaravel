@@ -58,3 +58,6 @@ Route::get('employee/import/', [EmployeeController::class, 'index'])->name('impo
 Route::post('employee/import/', [EmployeeController::class, 'import']);
 
 Route::get('employee/export/', [EmployeeController::class, 'export'])->name('export.employee');
+
+Route::get('/login',[EmployeeController::class, 'login']);
+Route::post('/login', [EmployeeController::class, 'storedata'])->name('login.store');
