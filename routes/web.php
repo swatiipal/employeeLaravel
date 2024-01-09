@@ -20,7 +20,7 @@ use App\Http\Controllers\ExcelImportController;
 
 Route::get('/employee', [EmployeeController::class, 'create'])->name('employee.create');
 Route::post('/employee', [EmployeeController::class, 'store'])->name('employee.store');
-Route::get('/', [EmployeeController::class, 'view'])->name('employee.view')->middleware('guard');
+Route::get('/', [EmployeeController::class, 'view'])->name('employee.view');
 Route::get('/edit/{id}', [EmployeeController::class, 'edit'])->name('employee.edit')->middleware('guard');
 Route::post('/update/{id}', [EmployeeController::class, 'update'])->name('employee.update')->middleware('guard');
 Route::get('/view/trash', [EmployeeController::class, 'trash'])->name('employee.trash')->middleware('guard');

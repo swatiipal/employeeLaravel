@@ -199,6 +199,7 @@ class EmployeeController extends Controller
     {
         $users = EmployeeModel::where('email',$request->email)->first();
         if ($users) {
+            dd($users->password);
             if(Hash::check($request->password, $users->password)){
                 session()->put('login',$request->email);
             }else {
