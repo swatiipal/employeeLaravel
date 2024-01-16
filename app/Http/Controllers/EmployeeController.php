@@ -30,7 +30,7 @@ class EmployeeController extends Controller
         $employee->name = $request['name'];
         $employee->dob = $request['dob'];
         $employee->email = $request['email'];
-        $employee->password = md5($request['password']);
+        $employee->password = bcrypt($request['password']);
         $employee->gender = $request['gender'];
         $employee->address = $request['address'];
         $employee->state = $request['state'];
@@ -197,9 +197,11 @@ class EmployeeController extends Controller
     }
     public function storedata(Request $request)
     {
+        // $users = EmployeeModel::find($request->email); 
+        // dd($users);
+        // $check_password = Hash::check($request->password, $user->password);
         $users = EmployeeModel::where('email',$request->email)->first();
         if ($users) {
-            dd($users->password);
             if(Hash::check($request->password, $users->password)){
                 session()->put('login',$request->email);
             }else {
